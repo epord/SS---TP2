@@ -2,6 +2,28 @@ package automaton;
 
 public class GOLTransformation implements Transformation{
 
+    private int rule;
+
+    public GOLTransformation(int rule) {
+        this.rule = rule;
+    }
+
+    private int getMinToSurvive() {
+        return rule/1000;
+    }
+
+    private int getMaxToSurvive() {
+        return (rule%1000)/100;
+    }
+
+    private int getMinToRevive() {
+        return (rule%100)/10;
+    }
+
+    private int getMaxToRevive() {
+        return rule%10;
+    }
+
     public World transform(World world) {
         World constructed = new World(world.getWidth(),world.getHeight(), world.getDepth());
         for (int k = 0; k < world.getDepth(); k++) {
@@ -10,15 +32,15 @@ public class GOLTransformation implements Transformation{
                     Integer alive = countNeighboursInState(world, i, j, k, State.ALIVE);
 
                     if (State.ALIVE.equals(world.getCellAt(i, j, k).getState())) {
-                        if (alive < 2) {
+                        if (alive < getMinToSurvive()) {
                             constructed.setCellState(i, j, k, State.DEAD);
-                        } else if (alive == 2 || alive == 3) {
+                        } else if (alive >= getMinToSurvive() && alive <= getMaxToSurvive()) {
                             constructed.setCellState(i, j, k, State.ALIVE);
-                        } else if (alive > 3) {
+                        } else if (alive > getMaxToSurvive()) {
                             constructed.setCellState(i, j, k, State.DEAD);
                         }
                     } else {
-                        if (alive == 2) {
+                        if (alive >= getMinToRevive() && alive <= getMaxToRevive()) {
                             constructed.setCellState(i, j, k, State.ALIVE);
                         }
                     }
