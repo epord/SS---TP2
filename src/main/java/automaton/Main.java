@@ -23,7 +23,7 @@ public class Main {
 
         Integer rule = 2333;
         if (args.length >= 3) {
-            rule = Integer.parseInt(args[1]);
+            rule = Integer.parseInt(args[2]);
         }
 
 //        World world = new World(4,5, 1);

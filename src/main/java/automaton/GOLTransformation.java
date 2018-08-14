@@ -1,5 +1,8 @@
 package automaton;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class GOLTransformation implements Transformation{
 
     private int rule;
@@ -53,15 +56,20 @@ public class GOLTransformation implements Transformation{
     }
 
     private Integer countNeighboursInState(World world, Integer x, Integer y, Integer z, State state){
+        Set<Cell> countedCells = new HashSet<>();
         Integer count= 0;
         if(world.isPeriodic()){
-            for (int i = (x-1); i < (x+1); i++) {
-                for (int j = (y-1); j < (y+1); j++) {
-                    for (int k = (z - 1); k < (z + 1); k++) {
-                        if (x != i || y != j || z != k) {
-                            Cell cell = world.getCellAt((i + world.getWidth()) % world.getWidth(), (j + world.getHeight()) % world.getHeight(), (k + world.getDepth()) % world.getDepth());
-                            if (state.equals(cell.state)) {
+            for (int i = (x-1); i <= (x+1); i++) {
+                for (int j = (y-1); j <= (y+1); j++) {
+                    for (int k = (z - 1); k <= (z + 1); k++) {
+                        int realI = (i + world.getWidth()) % world.getWidth();
+                        int realJ = (j + world.getHeight()) % world.getHeight();
+                        int realK = (k + world.getDepth()) % world.getDepth();
+                        if (x != realI || y != realJ || z != realK) {
+                            Cell cell = world.getCellAt(realI, realJ, realK);
+                            if (!countedCells.contains(cell) && state.equals(cell.state)) {
                                 count++;
+                                countedCells.add(cell);
                             }
                         }
                     }

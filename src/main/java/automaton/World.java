@@ -28,7 +28,7 @@ public class World {
         for (int i = 0; i < cells.length; i++) {
             for (int j = 0; j < cells[i].length; j++) {
                 for (int k = 0; k < cells[i][j].length; k++) {
-                    cells[i][j][k] = new Cell(state);
+                    cells[i][j][k] = new Cell(i, j, k, state);
                 }
             }
         }
