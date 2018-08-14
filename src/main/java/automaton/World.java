@@ -25,10 +25,11 @@ public class World {
     }
 
     public void fillCellsWith(State state){
-        for (int i = 0; i < cells.length; i++) {
-            for (int j = 0; j < cells[i].length; j++) {
-                for (int k = 0; k < cells[i][j].length; k++) {
-                    cells[i][j][k] = new Cell(i, j, k, state);
+
+        for (int k = 0; k < getDepth(); k++) {
+            for (int j = 0; j < getHeight(); j++) {
+                for (int i = 0; i < getWidth(); i++) {
+                    cells[k][j][i] = new Cell(i, j, k, state);
                 }
             }
         }
@@ -81,4 +82,48 @@ public class World {
         }
         return sb.toString();
     }
+
+
+    public Point getCenterOfMass() {
+        double x = 0.0, y = 0.0, z = 0.0;
+        int count = 0;
+        for (int k = 0; k < getDepth(); k++) {
+            for (int j = 0; j < getHeight(); j++) {
+                for (int i = 0; i < getWidth(); i++) {
+                    Cell cell = getCellAt(i, j, k);
+                    if (cell.getState() == State.ALIVE) {
+                        count++;
+                        x += i;
+                        y += j;
+                        z += k;
+                    }
+                }
+            }
+        }
+        return new Point(x/count, y/count, z/count);
+    }
+
+    public double getRadiusFrom(Point p) {
+        double radius = 0.0;
+        for (int k = 0; k < getDepth(); k++) {
+            for (int j = 0; j < getHeight(); j++) {
+                for (int i = 0; i < getWidth(); i++) {
+                    Cell cell = getCellAt(i, j, k);
+                    if (cell.getState() == State.ALIVE) {
+                        double tmp_radius = calculateDistance(new Point(cell.getX(), cell.getY(), cell.getZ()), p);
+                        radius = tmp_radius > radius ? tmp_radius : radius;
+                    }
+                }
+            }
+        }
+        return radius;
+    }
+
+    public double calculateDistance(Point p1, Point p2) {
+        return Math.sqrt(Math.pow(p1.getX() - p2.getX(), 2)
+                        + Math.pow(p1.getY() - p2.getY(),2)
+                        + Math.pow(p1.getZ() - p2.getZ(), 2));
+    }
+
+
 }

@@ -26,13 +26,6 @@ public class Main {
             rule = Integer.parseInt(args[2]);
         }
 
-//        World world = new World(4,5, 1);
-//        world.setCellState(1,0, 0, State.ALIVE);
-//        world.setCellState(2,1,  0,State.ALIVE);
-//        world.setCellState(0,2,  0,State.ALIVE);
-//        world.setCellState(1,2,  0,State.ALIVE);
-//        world.setCellState(2,2,  0,State.ALIVE);
-
         FileManager fm = new FileManager();
 
         BufferedReader br = new BufferedReader(new FileReader(filename));
@@ -50,7 +43,10 @@ public class Main {
         GOLTransformation transformation = new GOLTransformation(rule);
         for (int i = 0; i < iterations; i++) {
             world = transformation.transform(world);
-            System.out.println(world);
+//            System.out.println(world);
+            Point centerOfMass = world.getCenterOfMass();
+            double radius = world.getRadiusFrom(centerOfMass);
+            System.out.println(centerOfMass + " " + radius);
             fm.writeWorldStatus(bw, world);
         }
 
