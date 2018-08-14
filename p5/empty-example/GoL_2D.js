@@ -6,8 +6,8 @@ var world_dimensions;
 var cell_dimensions;
 var time_checkpoint;
 var current_iteration = 0;
-var canvasX = 500;
-var canvasY = 500;
+var canvasX = 700;
+var canvasY = 700;
 var time_between_frames = 100;
 
 function preload() {

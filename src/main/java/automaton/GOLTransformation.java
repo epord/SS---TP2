@@ -59,7 +59,7 @@ public class GOLTransformation implements Transformation{
                 for (int j = (y-1); j < (y+1); j++) {
                     for (int k = (z - 1); k < (z + 1); k++) {
                         if (x != i || y != j || z != k) {
-                            Cell cell = world.getCellAt(i % world.getWidth(), j % world.getHeight(), k % world.getDepth());
+                            Cell cell = world.getCellAt((i + world.getWidth()) % world.getWidth(), (j + world.getHeight()) % world.getHeight(), (k + world.getDepth()) % world.getDepth());
                             if (state.equals(cell.state)) {
                                 count++;
                             }

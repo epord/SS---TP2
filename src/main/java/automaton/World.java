@@ -7,7 +7,7 @@ public class World {
     private Integer width;
     private Integer height;
     private Integer depth;
-    private Boolean periodic=false;
+    private Boolean periodic=true;
 
     public World(Integer width, Integer height, Integer depth){
         cells = new Cell[depth][height][width];
