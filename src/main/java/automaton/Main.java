@@ -39,19 +39,25 @@ public class Main {
         fm.writeWorldInformation(bw, world);
         fm.writeWorldStatus(bw, world);
 
-        System.out.println(world);
         GOLTransformation transformation = new GOLTransformation(rule);
+        Statistics statistics = new Statistics();
+
+        Point initialCenterOfMass = world.getCenterOfMass();
         for (int i = 0; i < iterations; i++) {
-            world = transformation.transform(world);
-//            System.out.println(world);
+            System.out.println(world);
             Point centerOfMass = world.getCenterOfMass();
-            double radius = world.getRadiusFrom(centerOfMass);
-            System.out.println(centerOfMass + " " + radius);
+            statistics.addCenterOfMassDataPoint(centerOfMass);
+            statistics.addMovementSeriesDataPoint(world.calculateDistance(initialCenterOfMass,centerOfMass));
+            statistics.addOcupationSeriesDataPoint(world.getOccupied());
+            statistics.addReachSeriesDataPoint(world.getRadiusFrom(centerOfMass));
+
+            System.out.println("Center of mass: " + statistics.getCenterOfMassSeries().get(i));
+            System.out.println("Movement: " + statistics.getMovementSeries().get(i));
+            System.out.println("Ocupation: " + statistics.getOccupationSeries().get(i));
+            System.out.println("Reach: " + statistics.getReachSeries().get(i));
             fm.writeWorldStatus(bw, world);
+            world = transformation.transform(world);
         }
-
-
-
         bw.close();
     }
 }
