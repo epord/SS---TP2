@@ -9,6 +9,8 @@ var current_iteration = 0;
 var canvasX = 700;
 var canvasY = 700;
 var time_between_frames = 200;
+var centersOfMass;
+var radiuses;
 
 function preload() {
     output = loadStrings('output.txt');
@@ -20,27 +22,35 @@ function setup() {
     iterations = output[0];
 
     world_dimensions = output[1].split(" ");
-    world_dimensions = {x: world_dimensions[0], y: world_dimensions[1], z: world_dimensions[2]};
+    world_dimensions = {x: parseInt(world_dimensions[0]), y: parseInt(world_dimensions[1]), z: parseInt(world_dimensions[2])};
 
     var side = min(canvasX, canvasY)/2;
     cell_dimensions = {x: side/world_dimensions.x, y: side/world_dimensions.y, z: side/world_dimensions.z};
 
 
     cells = new Array(parseInt(iterations) + 1);
+    centersOfMass = new Array(parseInt(iterations) + 1);
+    radiuses = new Array(parseInt(iterations) + 1);
     for (var i = 0; i <= iterations; i++) {
         cells[i] = new Array(world_dimensions.z);
+        centersOfMass[i] = {x: parseInt(output[i * (world_dimensions.y+1) + 2].split(" ")[0]),
+                            y: parseInt(output[i * (world_dimensions.y+1) + 2].split(" ")[1]),
+                            z: parseInt(output[i * (world_dimensions.y+1) + 2].split(" ")[2])};
+        radiuses[i] = parseInt(output[i * (world_dimensions.y+1) + 2].split(" ")[3]);
         for (var z = 0; z < world_dimensions.z; z++) {
             cells[i][z] = new Array(world_dimensions.y);
             for (var y = 0; y < world_dimensions.y; y++) {
                 cells[i][z][y] = new Array(world_dimensions.x);
                 for (var x = 0; x < world_dimensions.x; x++) {
-                    cells[i][z][y][x] = output[(z + i*world_dimensions.z) * world_dimensions.y + y + 2].charAt(x)
+                    cells[i][z][y][x] = output[(z + i*world_dimensions.z) * world_dimensions.y + y + i + 3].charAt(x)
                 }
             }
         }
     }
     time_checkpoint = millis();
     console.log(cells)
+    console.log(centersOfMass)
+    console.log(radiuses)
 }
 
 
@@ -62,7 +72,6 @@ function draw() {
             }
         }
     }
-
     if (millis() - time_checkpoint > time_between_frames) {
         current_iteration = (current_iteration + 1) % (parseInt(iterations) + 1);
         time_checkpoint = millis();

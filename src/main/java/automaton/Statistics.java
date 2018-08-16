@@ -15,5 +15,6 @@ public class Statistics {
     //The distance between the center of mass at gen 0 and the furthest cell alive al gen t
     private List<Double> reachSeries;
 
+    
 
 }

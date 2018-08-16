@@ -37,6 +37,9 @@ public class Main {
 
         bw.write(iterations + "\n");
         fm.writeWorldInformation(bw, world);
+        Point centerOfMass = world.getCenterOfMass();
+        double radius = world.getRadiusFrom(centerOfMass);
+        fm.writeString(bw, centerOfMass.getX() + " " + centerOfMass.getY() + " " + radius);
         fm.writeWorldStatus(bw, world);
 
         System.out.println(world);
@@ -44,9 +47,10 @@ public class Main {
         for (int i = 0; i < iterations; i++) {
             world = transformation.transform(world);
 //            System.out.println(world);
-            Point centerOfMass = world.getCenterOfMass();
-            double radius = world.getRadiusFrom(centerOfMass);
+            centerOfMass = world.getCenterOfMass();
+            radius = world.getRadiusFrom(centerOfMass);
             System.out.println(centerOfMass + " " + radius);
+            fm.writeString(bw, centerOfMass.getX() + " " + centerOfMass.getY() + " " + centerOfMass.getZ() + " " + radius);
             fm.writeWorldStatus(bw, world);
         }
 

@@ -31,6 +31,15 @@ public class FileManager {
         }
     }
 
+    public void writeString(BufferedWriter bw, String s) {
+        try {
+            bw.write(s + "\n");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
     public void writeWorldInformation(BufferedWriter bw, World w) throws IOException {
         try {
             bw.write(w.getWidth() + " " + w.getHeight() + " " + w.getDepth() + "\n");
