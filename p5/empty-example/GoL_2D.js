@@ -17,7 +17,6 @@ function preload() {
 }
 
 function setup() {
-    createCanvas(canvasX, canvasY);
 
     iterations = output[0];
 
@@ -28,16 +27,18 @@ function setup() {
     var side = min(cell_dimensions.x, cell_dimensions.y);
     cell_dimensions = {x: side, y: side};
 
+    createCanvas(side * world_dimensions.x, side * world_dimensions.y);
+
     cells = new Array(parseInt(iterations) + 1);
     centersOfMass = new Array(parseInt(iterations) + 1);
     radiuses = new Array(parseInt(iterations) + 1);
 
     for (var i = 0; i <= iterations; i++) {
         cells[i] = new Array(world_dimensions.z);
-        centersOfMass[i] = {x: parseInt(output[i * (world_dimensions.y+1) + 2].split(" ")[0]),
-                            y: parseInt(output[i * (world_dimensions.y+1) + 2].split(" ")[1]),
-                            z: parseInt(output[i * (world_dimensions.y+1) + 2].split(" ")[2])};
-        radiuses[i] = output[i * (world_dimensions.y+1) + 2].split(" ")[3];
+        centersOfMass[i] = {x: parseFloat(output[i * (world_dimensions.y+1) + 2].split(" ")[0]),
+                            y: parseFloat(output[i * (world_dimensions.y+1) + 2].split(" ")[1]),
+                            z: parseFloat(output[i * (world_dimensions.y+1) + 2].split(" ")[2])};
+        radiuses[i] = parseFloat(output[i * (world_dimensions.y+1) + 2].split(" ")[3]);
         for (var z = 0; z < world_dimensions.z; z++) {
             cells[i][z] = new Array(world_dimensions.y);
             for (var y = 0; y < world_dimensions.y; y++) {
@@ -48,6 +49,7 @@ function setup() {
             }
         }
     }
+
 
     console.log(centersOfMass)
     console.log(radiuses)
@@ -64,7 +66,7 @@ function draw() {
             drawCell(x * cell_dimensions.x, y * cell_dimensions.y, cells[current_iteration][0][y][x]);
         }
     }
-    // drawRadius(centersOfMass[current_iteration].x, centersOfMass[current_iteration].y, radiuses[current_iteration]);
+    drawRadius(centersOfMass[current_iteration].x, centersOfMass[current_iteration].y, radiuses[current_iteration]);
 
     if (millis() - time_checkpoint > time_between_frames) {
         current_iteration = (current_iteration + 1) % (parseInt(iterations) + 1);
@@ -84,7 +86,7 @@ function drawCell(x, y, state) {
 function drawRadius(x, y, radius) {
     var c = color(0,0,0);
     fill(c);
-    rect((x+0.5) * cell_dimensions.x, (y+0.5) * cell_dimensions.x, 5, 5)
+    rect((x+0.5) * cell_dimensions.x - 2, (y+0.5) * cell_dimensions.x - 2, 4, 4)
     var c = color(255, 30, 30, 40);
     fill(c);
     noStroke();

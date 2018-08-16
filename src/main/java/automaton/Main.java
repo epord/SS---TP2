@@ -30,6 +30,15 @@ public class Main {
 
         BufferedReader br = new BufferedReader(new FileReader(filename));
         World world = fm.readWorld(br);
+//        World world = RandomGenerator.getRandomWorld(100, 100, 1);
+
+        Statistics statistics = new Statistics();
+        Point initialCenterOfMass = world.getCenterOfMass();
+        Point centerOfMass = world.getCenterOfMass();
+        statistics.addCenterOfMassDataPoint(centerOfMass);
+        statistics.addMovementSeriesDataPoint(world.calculateDistance(initialCenterOfMass,centerOfMass));
+        statistics.addOcupationSeriesDataPoint(world.getOccupied());
+        statistics.addReachSeriesDataPoint(world.getRadiusFrom(centerOfMass));
 
         File fout = new File("p5/empty-example/output.txt");
         FileOutputStream fos = new FileOutputStream(fout);
@@ -37,20 +46,27 @@ public class Main {
 
         bw.write(iterations + "\n");
         fm.writeWorldInformation(bw, world);
+        fm.writeString(bw, statistics.getCenterOfMassSeries().get(0).getX() + " "
+                            + statistics.getCenterOfMassSeries().get(0).getY() + " "
+                            + statistics.getCenterOfMassSeries().get(0).getZ() + " "
+                            + statistics.getReachSeries().get(0));
         fm.writeWorldStatus(bw, world);
 
         System.out.println(world);
         GOLTransformation transformation = new GOLTransformation(rule);
-        Statistics statistics = new Statistics();
 
-        Point initialCenterOfMass = world.getCenterOfMass();
-        for (int i = 0; i < iterations; i++) {
+        for (int i = 1; i <= iterations; i++) {
             System.out.println(world);
-            Point centerOfMass = world.getCenterOfMass();
+            centerOfMass = world.getCenterOfMass();
             statistics.addCenterOfMassDataPoint(centerOfMass);
             statistics.addMovementSeriesDataPoint(world.calculateDistance(initialCenterOfMass,centerOfMass));
             statistics.addOcupationSeriesDataPoint(world.getOccupied());
             statistics.addReachSeriesDataPoint(world.getRadiusFrom(centerOfMass));
+
+            fm.writeString(bw, statistics.getCenterOfMassSeries().get(i).getX() + " "
+                    + statistics.getCenterOfMassSeries().get(i).getY() + " "
+                    + statistics.getCenterOfMassSeries().get(i).getZ() + " "
+                    + statistics.getReachSeries().get(i));
 
             System.out.println("Center of mass: " + statistics.getCenterOfMassSeries().get(i));
             System.out.println("Movement: " + statistics.getMovementSeries().get(i));
