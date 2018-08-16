@@ -40,6 +40,20 @@ public class World {
         cell.setState(state);
     }
 
+    public Double getOccupied(){
+        Integer occupied = 0;
+        for (int k = 0; k < getDepth(); k++) {
+            for (int j = 0; j < getHeight(); j++) {
+                for (int i = 0; i < getWidth(); i++) {
+                    if(State.ALIVE.equals(getCellAt(i,j,k).getState())){
+                        occupied++;
+                    }
+                }
+            }
+        }
+        return occupied*1.0/(getDepth()*getHeight()*getWidth());
+    }
+
     public Boolean isPeriodic(){
         return periodic;
     }
